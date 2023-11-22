@@ -916,8 +916,8 @@
                     {
                         "name": "project",
                         "in": "path",
+                        "required": true,
                         "description": "The name of the project",
-                        "required": false,
                         "schema": {
                             "type": "string"
                         }
@@ -1315,6 +1315,17 @@
                 "summary": "Create a Scale Cluster",
                 "description": "Returns Scale Cluster",
                 "operationId": "scaleCluster",
+                "parameters": [
+                    {
+                        "name": "kubernetes",
+                        "in": "path",
+                        "description": "The name of the kubernetes cluster",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1447,7 +1458,7 @@
                         "name": "project",
                         "in": "path",
                         "description": "The name of the project",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "type": "string"
                         }
@@ -2137,6 +2148,7 @@
                         "name": "network",
                         "in": "path",
                         "description": "The name of the network",
+                        "required": true,
                         "schema": {
                             "type": "string"
                         }
@@ -2247,7 +2259,7 @@
                         "name": "project",
                         "in": "path",
                         "description": "The name of the project",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "type": "string"
                         }
@@ -2529,19 +2541,19 @@
                 "operationId": "listSnapshot",
                 "parameters": [
                     {
-                        "name": "snapshot",
+                        "name": "project",
                         "in": "path",
-                        "description": "Name of the block storage",
+                        "description": "Name of the project",
                         "required": true,
                         "schema": {
                             "type": "string"
                         }
                     },
                     {
-                        "name": "project",
+                        "name": "block_storage",
                         "in": "path",
-                        "description": "Name of the project",
-                        "required": false,
+                        "description": "Name of the block storage",
+                        "required": true,
                         "schema": {
                             "type": "string"
                         }
@@ -3022,103 +3034,6 @@
                             "type": "string"
                         },
                         "example": "My-VPC"
-                    },
-                    {
-                        "name": "reason",
-                        "in": "path",
-                        "description": "Reason of the new rule",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "example": "To make egress rule"
-                    },
-                    {
-                        "name": "traffic_type",
-                        "in": "path",
-                        "description": "traffic type of the new rule: egress, ingress",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "example": "egress"
-                    },
-                    {
-                        "name": "start_port",
-                        "in": "path",
-                        "description": "start port of the new rule",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "example": "40"
-                    },
-                    {
-                        "name": "end_port",
-                        "in": "path",
-                        "description": "end port of the new rule",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "example": "42"
-                    },
-                    {
-                        "name": "cidr_list",
-                        "in": "path",
-                        "description": "cidr_list of the new rule",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "number",
-                        "in": "path",
-                        "description": "Number of the new rule",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "action",
-                        "in": "path",
-                        "description": "action type of the new rule: allow, deny",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "example": "allow"
-                    },
-                    {
-                        "name": "protocol",
-                        "in": "path",
-                        "description": "protocol of the new rule: tcp,udp,icmp,all",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "example": "tcp"
-                    },
-                    {
-                        "name": "protocol_number",
-                        "in": "path",
-                        "description": "protocol_number if protocol was provided",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "acl_name",
-                        "in": "path",
-                        "description": "Vpc acl name",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "example": "My-ACL"
                     }
                 ],
                 "requestBody": {
@@ -3358,7 +3273,7 @@
                         "name": "project",
                         "in": "path",
                         "description": "The name of the project",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "type": "string"
                         }
@@ -3473,7 +3388,7 @@
                         "name": "project",
                         "in": "path",
                         "description": "The name of the project",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "type": "string"
                         }
