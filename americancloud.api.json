@@ -2435,7 +2435,7 @@
                 ],
                 "summary": "Get list of projects",
                 "description": "Returns list of projects",
-                "operationId": "index",
+                "operationId": "listProjects",
                 "responses": {
                     "200": {
                         "description": "Ok",

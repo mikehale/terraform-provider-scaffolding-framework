@@ -1482,8 +1482,8 @@ type ClientInterface interface {
 
 	Update(ctx context.Context, project string, body UpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// Index request
-	Index(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// ListProjects request
+	ListProjects(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// CreateSnapshotWithBody request with any body
 	CreateSnapshotWithBody(ctx context.Context, blockStorage string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -2400,8 +2400,8 @@ func (c *Client) Update(ctx context.Context, project string, body UpdateJSONRequ
 	return c.Client.Do(req)
 }
 
-func (c *Client) Index(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewIndexRequest(c.Server)
+func (c *Client) ListProjects(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListProjectsRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -4579,8 +4579,8 @@ func NewUpdateRequestWithBody(server string, project string, contentType string,
 	return req, nil
 }
 
-// NewIndexRequest generates requests for Index
-func NewIndexRequest(server string) (*http.Request, error) {
+// NewListProjectsRequest generates requests for ListProjects
+func NewListProjectsRequest(server string) (*http.Request, error) {
 	var err error
 
 	serverURL, err := url.Parse(server)
@@ -5387,8 +5387,8 @@ type ClientWithResponsesInterface interface {
 
 	UpdateWithResponse(ctx context.Context, project string, body UpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateResponse, error)
 
-	// IndexWithResponse request
-	IndexWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*IndexResponse, error)
+	// ListProjectsWithResponse request
+	ListProjectsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListProjectsResponse, error)
 
 	// CreateSnapshotWithBodyWithResponse request with any body
 	CreateSnapshotWithBodyWithResponse(ctx context.Context, blockStorage string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateSnapshotResponse, error)
@@ -6826,14 +6826,14 @@ func (r UpdateResponse) StatusCode() int {
 	return 0
 }
 
-type IndexResponse struct {
+type ListProjectsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *ProjectResource
 }
 
 // Status returns HTTPResponse.Status
-func (r IndexResponse) Status() string {
+func (r ListProjectsResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -6841,7 +6841,7 @@ func (r IndexResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r IndexResponse) StatusCode() int {
+func (r ListProjectsResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -7841,13 +7841,13 @@ func (c *ClientWithResponses) UpdateWithResponse(ctx context.Context, project st
 	return ParseUpdateResponse(rsp)
 }
 
-// IndexWithResponse request returning *IndexResponse
-func (c *ClientWithResponses) IndexWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*IndexResponse, error) {
-	rsp, err := c.Index(ctx, reqEditors...)
+// ListProjectsWithResponse request returning *ListProjectsResponse
+func (c *ClientWithResponses) ListProjectsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListProjectsResponse, error) {
+	rsp, err := c.ListProjects(ctx, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseIndexResponse(rsp)
+	return ParseListProjectsResponse(rsp)
 }
 
 // CreateSnapshotWithBodyWithResponse request with arbitrary body returning *CreateSnapshotResponse
@@ -9583,15 +9583,15 @@ func ParseUpdateResponse(rsp *http.Response) (*UpdateResponse, error) {
 	return response, nil
 }
 
-// ParseIndexResponse parses an HTTP response from a IndexWithResponse call
-func ParseIndexResponse(rsp *http.Response) (*IndexResponse, error) {
+// ParseListProjectsResponse parses an HTTP response from a ListProjectsWithResponse call
+func ParseListProjectsResponse(rsp *http.Response) (*ListProjectsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &IndexResponse{
+	response := &ListProjectsResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
