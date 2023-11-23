@@ -1,51 +1,39 @@
-// Copyright (c) HashiCorp, Inc.
-// SPDX-License-Identifier: MPL-2.0
-
 package main
+
+//go:generate oapi-codegen -package=main -generate=client,types -o ./americancloud.gen.go https://app.americancloud.com/docs/api-docs.json
 
 import (
 	"context"
-	"flag"
-	"log"
+	"fmt"
+	"os"
 
-	"github.com/hashicorp/terraform-plugin-framework/providerserver"
-	"github.com/hashicorp/terraform-provider-scaffolding-framework/internal/provider"
-)
-
-// Run "go generate" to format example terraform files and generate the docs for the registry/website
-
-// If you do not have terraform installed, you can remove the formatting command, but its suggested to
-// ensure the documentation is formatted properly.
-//go:generate terraform fmt -recursive ./examples/
-
-// Run the docs generation tool, check its repository for more information on how it works and how docs
-// can be customized.
-//go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
-
-var (
-	// these will be set by the goreleaser configuration
-	// to appropriate values for the compiled binary.
-	version string = "dev"
-
-	// goreleaser can pass other information to the main package, such as the specific commit
-	// https://goreleaser.com/cookbooks/using-main.version/
+	"github.com/deepmap/oapi-codegen/pkg/securityprovider"
 )
 
 func main() {
-	var debug bool
-
-	flag.BoolVar(&debug, "debug", false, "set to true to run the provider with support for debuggers like delve")
-	flag.Parse()
-
-	opts := providerserver.ServeOpts{
-		// TODO: Update this string with the published name of your provider.
-		Address: "registry.terraform.io/hashicorp/scaffolding",
-		Debug:   debug,
+	bearerTokenProvider, bearerTokenProviderErr := securityprovider.NewSecurityProviderBearerToken(os.Getenv("AC_TOKEN"))
+	if bearerTokenProviderErr != nil {
+		panic(bearerTokenProviderErr)
 	}
 
-	err := providerserver.Serve(context.Background(), provider.New(version), opts)
-
+	c, err := NewClientWithResponses("https://app.americancloud.com/api", WithRequestEditorFn(bearerTokenProvider.Intercept))
 	if err != nil {
-		log.Fatal(err.Error())
+		panic(err)
+	}
+
+	resp, err := c.ListProjectsWithResponse(context.Background())
+	if err != nil {
+		panic(err)
+	}
+	if !(resp.StatusCode() >= 200 && resp.StatusCode() < 300) {
+		panic(resp.Status())
+	}
+
+	projects := *resp.JSON200.Data
+	if len(projects) > 0 {
+		fmt.Printf("Id: %v\n", *projects[0].Id)
+		fmt.Printf("AccountID: %v\n", *projects[0].AccountId)
+		fmt.Printf("Description: %v\n", *projects[0].Description)
+		fmt.Printf("Created At: %v\n", *projects[0].CreatedAt)
 	}
 }

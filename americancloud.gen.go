@@ -14,6 +14,7 @@ import (
 	"strings"
 
 	"github.com/oapi-codegen/runtime"
+	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
 const (
@@ -1005,7 +1006,7 @@ type ProjectResource struct {
 // ProjectSchema Project Schema
 type ProjectSchema struct {
 	// AccountId Account id of the new project
-	AccountId *int `json:"account_id,omitempty"`
+	AccountId *openapi_types.UUID `json:"account_id,omitempty"`
 
 	// CreatedAt Created at
 	CreatedAt *string `json:"created_at,omitempty"`
@@ -1017,7 +1018,7 @@ type ProjectSchema struct {
 	Icon *string `json:"icon,omitempty"`
 
 	// Id ID
-	Id *int64 `json:"id,omitempty"`
+	Id *openapi_types.UUID `json:"id,omitempty"`
 
 	// Name Name of the new project
 	Name *string `json:"name,omitempty"`

@@ -7487,8 +7487,8 @@
                     "id": {
                         "title": "ID",
                         "description": "ID",
-                        "type": "integer",
-                        "format": "int64",
+                        "type": "string",
+                        "format": "uuid",
                         "example": "79552b97-a784-4f7f-8154-2049491379c0"
                     },
                     "icon": {
@@ -7518,8 +7518,8 @@
                     "account_id": {
                         "title": "Account ID",
                         "description": "Account id of the new project",
-                        "type": "integer",
-                        "format": "string",
+                        "type": "string",
+                        "format": "uuid",
                         "example": "80552b97-a784-4f7f-8154-2049491379c0"
                     },
                     "created_at": {
