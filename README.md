@@ -62,3 +62,14 @@ In order to run the full suite of Acceptance tests, run `make testacc`.
 ```shell
 make testacc
 ```
+
+Install codegen, and update client
+```
+go install github.com/deepmap/oapi-codegen/v2/cmd/oapi-codegen@latest
+oapi-codegen -package=main -generate=client,types -o ./americancloud.gen.go americancloud.api.json
+```
+
+Build and run the basic example:
+```
+go build ./main.go ./americancloud.gen.go; AC_TOKEN=abc123 ./main
+```
